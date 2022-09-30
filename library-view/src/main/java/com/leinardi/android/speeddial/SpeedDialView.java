@@ -719,8 +719,24 @@ public class SpeedDialView extends LinearLayout implements CoordinatorLayout.Att
     }
 
     private void init(Context context, @Nullable AttributeSet attrs) {
+        setClipChildren(false);
+        setClipToPadding(false);
         mMainFab = createMainFab();
-        addView(mMainFab);
+        final int padding = UiUtils.dpToPx(context, 16);
+        final LinearLayout mainLinearLayout = new LinearLayout(context);
+        mainLinearLayout.setClipChildren(false);
+        mainLinearLayout.setClipToPadding(false);
+        mainLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
+        final LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        params.setMargins(padding, padding, padding, padding);
+        mainLinearLayout.addView(mMainFab, params);
+        mainLinearLayout.setGravity(Gravity.CENTER);
+
+        final LayoutParams layoutParams = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        layoutParams.gravity = Gravity.END;
+        layoutParams.setMargins(0, 0, 0, 0);
+
+        addView(mainLinearLayout, layoutParams);
         setClipChildren(false);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             setElevation(getResources().getDimension(R.dimen.sd_close_elevation));
